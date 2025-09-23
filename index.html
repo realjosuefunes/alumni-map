@@ -443,7 +443,7 @@
               });
               const people = map.getStyle().sources['people'].data.features
               const schools = map.getStyle().sources['schools'].data.features
-
+              // custom geocoder
               function forwardGeocoder(query) {
                 const matchingFeatures = [];
                 for (const feature of people) {
@@ -453,6 +453,17 @@
                       .includes(query.toLowerCase())
                   ) {
                     feature['place_name'] = `🦁 ${feature.properties.name}`;
+                    feature['center'] = feature.geometry.coordinates;
+                    matchingFeatures.push(feature);
+                  }
+                }
+                for (const feature of schools) {
+                  if (
+                    feature.properties.name
+                      .toLowerCase()
+                      .includes(query.toLowerCase())
+                  ) {
+                    feature['place_name'] = `📚 ${feature.properties.name}`;
                     feature['center'] = feature.geometry.coordinates;
                     matchingFeatures.push(feature);
                   }
