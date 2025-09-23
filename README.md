@@ -43,7 +43,7 @@ Alumni data comes from student slides submitted for Decision Day at CCPA.
 
 ### Staff
 
-Staff data is scraped from
+CCPA Staff data is scraped from the Internet or gathered by students in 1:1 meetings.
 
 ### Transit layers
 
