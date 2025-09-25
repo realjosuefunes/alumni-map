@@ -1,3 +1,5 @@
+[![Jekyll site CI](https://github.com/ccpa-ousd/alumni-map/actions/workflows/jekyll-docker.yml/badge.svg)](https://github.com/ccpa-ousd/alumni-map/actions/workflows/jekyll-docker.yml)
+
 # ccpa-alumni-map
 
 What colleges and universities have CCPA graduates chosen to attend? Use this interactive map to explore the college journeys of CCPA alumni.
