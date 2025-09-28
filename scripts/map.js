@@ -33,6 +33,7 @@ categories = {
   uc: { color: "#002A56", outline: "black", source: "schools" },
   csu: { color: "#E61A37", outline: "black", source: "schools" },
   ccc: { color: "blue", outline: "black", source: "schools" },
+  peralta: { color: "#0f4b90", outline: "black", source: "schools" },
   hbcu: { color: "aqua", outline: "black", source: "schools" },
   ncaa_d1: { color: "#0097D8", outline: "white", source: "schools" },
   ncaa_d2: { color: "#0097D8", outline: "white", source: "schools" },
@@ -45,8 +46,9 @@ categories = {
   global: { color: "#F2CA27", outline: "black", source: "schools" },
   // 'us-non-california-public': { 'color': 'teal', 'outline': 'black', 'source': 'schools' },
   // 'us-non-california-private': { 'color': 'orange', 'outline': 'black', 'source': 'schools' },
-  ccpa_2023: { color: "#006000", outline: "gold", source: "people" }, // green
   ccpa_2022: { color: "#006000", outline: "gold", source: "people" }, // green
+  ccpa_2023: { color: "#006000", outline: "gold", source: "people" }, // green
+  ccpa_2026: { color: "#006000", outline: "gold", source: "people" }, // green
   ccpa_staff: { color: "gold", outline: "#006000", source: "people" }, // green
   // Transit
   bart_routes: { color: "", outline: "", source: "map_style" },
@@ -76,6 +78,10 @@ map.on("load", () => {
     if (error) throw error;
     map.addImage("ccc", image);
   });
+  map.loadImage("icons/logo-peralta.png", (error, image) => {
+    if (error) throw error;
+    map.addImage("peralta", image);
+  });
   map.loadImage("icons/logo-hbcu.png", (error, image) => {
     if (error) throw error;
     map.addImage("hbcu", image);
@@ -83,6 +89,10 @@ map.on("load", () => {
   map.loadImage("icons/logo-ccpa.png", (error, image) => {
     if (error) throw error;
     map.addImage("ccpa", image);
+  });
+  map.loadImage("icons/logo-seniors.png", (error, image) => {
+    if (error) throw error;
+    map.addImage("seniors", image);
   });
   for (let i = 0; i < datasets.length; i++) {
     $.ajax({
@@ -152,7 +162,17 @@ map.on("load", () => {
                 "icon-image": "ccc",
                 "icon-size": 0.16,
               },
-              filter: ["all", ["==", "system_acronym", "CCC"]],
+              filter: ["any", ["==", "system_acronym", "CCC"], ["==", "system_acronym", "CCC, Peralta"]],
+            });
+            map.addLayer({
+              id: "peralta",
+              type: "symbol",
+              source: "schools",
+              layout: {
+                "icon-image": "peralta",
+                "icon-size": 0.16,
+              },
+              filter: ["all", ["==", "system_acronym", "CCC, Peralta"]],
             });
             map.addLayer({
               id: "uc",
@@ -360,6 +380,16 @@ map.on("load", () => {
               filter: ["all", ["==", "grad_year", "2022"]],
             });
             map.addLayer({
+              id: "ccpa_2026",
+              type: "symbol",
+              source: "people",
+              layout: {
+                "icon-image": "seniors",
+                "icon-size": 0.7,
+              },
+              filter: ["all", ["==", "grad_year", "2026"]],
+            });
+            map.addLayer({
               id: "ccpa_staff",
               type: "symbol",
               source: "people",
@@ -442,6 +472,14 @@ map.on("click", categoryList, (e) => {
         ${name} (<i>Class of ${year}</i>)</p>
         <p><strong>School choice:</strong><br>
         <a href="${website}" target='_blank'>${school}</a></p>`;
+  } else if (layer == "ccpa_2026") {
+    let school = e.features[0].properties.school_decision;
+    let year = e.features[0].properties.grad_year;
+    html = `<a href='${image}' target='_blank'><img src='${image}' class='popup-img' /></a>
+        <p><strong>CCPA Senior:</strong><br>
+        ${name} (<i>Class of ${year}</i>)</p>
+        <p><strong>Current school:</strong><br>
+        <a href="${website}" target='_blank'>${school}</a></p>`;
   } else if (layer == "ccpa_staff") {
     let school = e.features[0].properties.school_decision;
     let degree = e.features[0].properties.degree;
@@ -515,7 +553,7 @@ map.on("click", categoryList, (e) => {
     let name = e.features[0].properties.Name;
     let desc = e.features[0].properties.Description;
     let website = "https://bart.gov/stations";
-    html = `<strong><a href="${website}" target='_blank'>${name} BART Station</a></strong><br>${desc}`;
+    html = `<img src='img/bart.jpg' class='popup-img' /><p><strong><a href="${website}" target='_blank'>${name} BART Station</a></strong><br>${desc}</p>`;
   } else {
     html = `<a href='${image}' target='_blank'><img src='${image}' class='popup-img' /></a><br/>
         <p><strong><a href="${website}" target='_blank'>${name}</a></strong>`;
