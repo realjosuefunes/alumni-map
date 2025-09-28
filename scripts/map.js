@@ -409,6 +409,11 @@ map.on("load", () => {
 });
 
 map.on("load", () => {
+  map.addSource("oakland-council-districts", {
+    type: "geojson",
+    // Use a URL for the value for the `data` property.
+    data: "sources/City_of_Oakland_Council_Districts.geojson",
+  });
   map.addSource("iso", {
     type: "geojson",
     data: {
@@ -424,11 +429,22 @@ map.on("load", () => {
       paint: {
         "fill-color": "#FB02C9",
         "fill-opacity": 0.3,
-        // 'line-width': 2,
       },
     },
     "poi-label"
   );
+  map.addLayer({
+    id: "oakland-council-districts",
+    type: "line",
+    source: "oakland-council-districts",
+    paint: {
+      "line-width": 1,
+      "line-color": "red",
+      "line-opacity": 0.5,
+      visibility: "none",
+    },
+  });
+
   // marker.setLngLat(lngLat).addTo(map); // Add marker at CCPA
   // getIso(); // API call
 });
