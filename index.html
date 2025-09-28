@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>CCPA Alumni Map (alpha)</title>
+  <title>CCPA Alumni Map</title>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -69,7 +69,7 @@
                 HBCU
               </label>
               <h4 class='txt-bold pt12 '>CCPA People:</h4>
-              <label class='switch-container'>
+              <!-- <label class='switch-container'>
                 <input type='checkbox' name='ccpa_2026' checked />
                 <div class='switch mr6'></div>
                 Class of 2026
@@ -88,7 +88,28 @@
                 <input type='checkbox' name='ccpa_staff' checked />
                 <div class='switch mr6'></div>
                 CCPA Staff
-              </label>
+              </label> -->
+              <div class='toggle-group mr18'>
+                <label class='toggle-container'>
+                  <input name='ccpa_2026' type='checkbox' />
+                  <div class='toggle'>Seniors</div>
+                </label>
+                <label class='toggle-container'>
+                  <input name='ccpa_2023' type='checkbox' />
+                  <div class='toggle'>2023</div>
+                </label>
+              </div>
+              <div class='toggle-group mr18'>
+                <label class='toggle-container'>
+                  <input name='ccpa_2022' type='checkbox' checked />
+                  <div class='toggle'>2022</div>
+                </label>
+                <label class='toggle-container'>
+                  <input name='ccpa_staff' type='checkbox' checked />
+                  <div class='toggle'>Staff</div>
+                </label>
+              </div>
+
               <h4 class='txt-bold pt12 '>NCAA:</h4>
               <div class='toggle-group mr18'>
                 <label class='toggle-container'>
@@ -219,6 +240,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="scripts/map.js"></script>
+  <script src="scripts/locationDropDown.js"></script>
   <script src="scripts/isochrones.js"></script>
   <!-- <script src="scripts/controls.js"></script> -->
 </body>

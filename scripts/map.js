@@ -27,6 +27,7 @@ map.on("load", function () {
 datasets = [
   { name: "schools", url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=1593214570&single=true&output=csv" },
   { name: "people", url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=435305116&single=true&output=csv" },
+  { name: "programs", url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=275662553&single=true&output=csv" },
 ];
 categories = {
   // School groups
@@ -50,6 +51,8 @@ categories = {
   ccpa_2023: { color: "#006000", outline: "gold", source: "people" }, // green
   ccpa_2026: { color: "#006000", outline: "gold", source: "people" }, // green
   ccpa_staff: { color: "gold", outline: "#006000", source: "people" }, // green
+  // Programs
+  programs: { color: "gold", outline: "#006000", source: "programs" }, // green
   // Transit
   bart_routes: { color: "", outline: "", source: "map_style" },
   bart_stops: { color: "", outline: "", source: "map_style" },
@@ -94,6 +97,10 @@ map.on("load", () => {
     if (error) throw error;
     map.addImage("seniors", image);
   });
+  map.loadImage("icons/icon-programs.png", (error, image) => {
+    if (error) throw error;
+    map.addImage("programs", image);
+  });
   for (let i = 0; i < datasets.length; i++) {
     $.ajax({
       type: "GET",
@@ -119,8 +126,9 @@ map.on("load", () => {
               type: "geojson",
               data: data,
             });
-            const people = map.getStyle().sources["people"].data.features;
             const schools = map.getStyle().sources["schools"].data.features;
+            const people = map.getStyle().sources["people"].data.features;
+            const programs = map.getStyle().sources["programs"].data.features;
             // custom geocoder
             function forwardGeocoder(query) {
               const matchingFeatures = [];
@@ -134,6 +142,13 @@ map.on("load", () => {
               for (const feature of schools) {
                 if (feature.properties.name.toLowerCase().includes(query.toLowerCase())) {
                   feature["place_name"] = `📚 ${feature.properties.name}`;
+                  feature["center"] = feature.geometry.coordinates;
+                  matchingFeatures.push(feature);
+                }
+              }
+              for (const feature of programs) {
+                if (feature.properties.name.toLowerCase().includes(query.toLowerCase())) {
+                  feature["place_name"] = `💰 ${feature.properties.name}`;
                   feature["center"] = feature.geometry.coordinates;
                   matchingFeatures.push(feature);
                 }
@@ -359,17 +374,6 @@ map.on("load", () => {
             //   ],
             // });
             map.addLayer({
-              id: "ccpa_2023",
-              type: "symbol",
-              source: "people",
-              layout: {
-                "icon-image": "ccpa",
-                "icon-size": 0.1,
-                // 'visibility': 'none'
-              },
-              filter: ["all", ["==", "grad_year", "2023"]],
-            });
-            map.addLayer({
               id: "ccpa_2022",
               type: "symbol",
               source: "people",
@@ -381,12 +385,24 @@ map.on("load", () => {
               filter: ["all", ["==", "grad_year", "2022"]],
             });
             map.addLayer({
+              id: "ccpa_2023",
+              type: "symbol",
+              source: "people",
+              layout: {
+                "icon-image": "ccpa",
+                "icon-size": 0.1,
+                // 'visibility': 'none'
+              },
+              filter: ["all", ["==", "grad_year", "2023"]],
+            });
+            map.addLayer({
               id: "ccpa_2026",
               type: "symbol",
               source: "people",
               layout: {
                 "icon-image": "seniors",
                 "icon-size": 0.2,
+                visibility: "none",
               },
               filter: ["all", ["==", "grad_year", "2026"]],
             });
@@ -400,6 +416,15 @@ map.on("load", () => {
                 // 'visibility': 'none'
               },
               filter: ["all", ["==", "grad_year", "staff"]],
+            });
+            map.addLayer({
+              id: "programs",
+              type: "symbol",
+              source: "programs",
+              layout: {
+                "icon-image": "programs",
+                "icon-size": 0.07,
+              },
             });
           }
         );
@@ -421,6 +446,7 @@ map.on("load", () => {
       features: [],
     },
   });
+
   map.addLayer(
     {
       id: "isoLayer",
@@ -475,12 +501,14 @@ map.on("click", categoryList, (e) => {
   let pubPriv = e.features[0].properties.pub_priv;
   let layer = e.features[0].layer.id;
   let html = "";
+  // schools popups
   if (layer == "uc" || layer == "csu" || layer == "ccc") {
     let location = e.features[0].properties.location;
     let system_acronym = e.features[0].properties.system_acronym;
     let system_long = e.features[0].properties.system_long;
     html = `<a href='${image}' target='_blank'><img src='${image}' class='popup-img' /></a>
         <p><strong><a href="${website}" target='_blank'>${name}</a></strong> is a ${pubPriv.toLowerCase()} school located in ${location}. This campus part of the ${system_long} (${system_acronym}) system.`;
+    // people popups
   } else if (layer == "ccpa_2022" || layer == "ccpa_2023") {
     let school = e.features[0].properties.school_decision;
     let year = e.features[0].properties.grad_year;
@@ -510,6 +538,15 @@ map.on("click", categoryList, (e) => {
           <a href="${website}" target='_blank'>${school}</a></p>
         <p><strong>Degree or Credential:</strong><br>
         ${degree}</p>`;
+  } else if (layer == "programs") {
+    let name = e.features[0].properties.name;
+    let desc = e.features[0].properties.description;
+    let address = e.features[0].properties.street_address;
+    let image = e.features[0].properties.image;
+    let website = e.features[0].properties.website;
+    html = `<a href='${website}' target='_blank'><img src='${image}' class='popup-img' /></a>
+        <p><strong><a href="${website}" target='_blank'>${name}</a></strong></p><p>${address}<br/></p><p>${desc}</p>
+        <p><a href='https://sites.google.com/ousd.org/ccpacollegeandcareer/summer-opportunities?authuser=0' target='_blank'>CCPA Summer Opportunities</a></p>`;
   } else if (layer == "hbcu") {
     let location = e.features[0].properties.location;
     let pub_priv = e.features[0].properties.pub_priv;
