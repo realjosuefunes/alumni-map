@@ -136,7 +136,7 @@ map.on("load", () => {
                 accessToken: mapboxgl.accessToken,
                 localGeocoder: forwardGeocoder,
                 mapboxgl: mapboxgl,
-                collapsed: true,
+                collapsed: false,
                 proximity: { latitude: 37.78352, longitude: -122.219355 },
                 clearAndBlurOnEsc: true,
               }),
