@@ -68,6 +68,19 @@ options.addEventListener("change", (event) => {
         map.fitBounds(bbox, {
           padding: { top: 10, bottom: 25, left: 50, right: 5 },
         });
+      } else if (newLocation === "peralta") {
+        map.setLayoutProperty("global", "visibility", "none");
+        map.setLayoutProperty("canada", "visibility", "none");
+        map.setLayoutProperty("mexico", "visibility", "none");
+        map.setLayoutProperty(newLocation, "visibility", "visible");
+        // fit map to united states
+        const bbox = [
+          [-122.329989, 37.89548],
+          [-122.17103, 37.748219],
+        ];
+        map.fitBounds(bbox, {
+          padding: { top: 10, bottom: 25, left: 50, right: 5 },
+        });
       } else if (newLocation === "north_america") {
         map.setLayoutProperty("global", "visibility", "none");
         map.setLayoutProperty("canada", "visibility", "visible");

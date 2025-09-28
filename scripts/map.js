@@ -155,6 +155,18 @@ map.on("load", () => {
             map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-left");
 
             map.addLayer({
+              id: "california",
+              type: "circle",
+              source: "schools",
+              paint: {
+                "circle-color": categories["california"].color,
+                "circle-stroke-color": categories["california"].outline,
+                "circle-stroke-width": 1,
+                "circle-radius": 7,
+              },
+              filter: ["all", ["==", "state", "California"], ["!=", "system_acronym", "UC"], ["!=", "system_acronym", "CSU"], ["!=", "system_acronym", "CCC"]],
+            });
+            map.addLayer({
               id: "ccc",
               type: "symbol",
               source: "schools",
@@ -170,7 +182,7 @@ map.on("load", () => {
               source: "schools",
               layout: {
                 "icon-image": "peralta",
-                "icon-size": 0.16,
+                "icon-size": 0.065,
               },
               filter: ["all", ["==", "system_acronym", "CCC, Peralta"]],
             });
@@ -223,18 +235,7 @@ map.on("load", () => {
               },
               filter: ["all", ["==", "country", "MX"]],
             });
-            map.addLayer({
-              id: "california",
-              type: "circle",
-              source: "schools",
-              paint: {
-                "circle-color": categories["california"].color,
-                "circle-stroke-color": categories["california"].outline,
-                "circle-stroke-width": 1,
-                "circle-radius": 7,
-              },
-              filter: ["all", ["==", "state", "California"], ["!=", "system_acronym", "UC"], ["!=", "system_acronym", "CSU"], ["!=", "system_acronym", "CCC"]],
-            });
+
             map.addLayer({
               id: "ncaa_d1",
               type: "circle",
@@ -385,7 +386,7 @@ map.on("load", () => {
               source: "people",
               layout: {
                 "icon-image": "seniors",
-                "icon-size": 0.7,
+                "icon-size": 0.2,
               },
               filter: ["all", ["==", "grad_year", "2026"]],
             });
