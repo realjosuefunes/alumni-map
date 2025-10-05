@@ -1,15 +1,3 @@
-function toggleNav() {
-  var sidebar = document.querySelector(".sidebar");
-  var content = document.getElementById("content");
-
-  if (sidebar.style.width === "0px" || sidebar.style.width === "") {
-    sidebar.style.width = "250px";
-    content.style.marginRight = "250px";
-  } else {
-    sidebar.style.width = "0";
-    content.style.marginRight = "0";
-  }
-}
 mapboxgl.accessToken = "pk.eyJ1IjoiZG9tbGV0IiwiYSI6ImNsaTN5MXhseTA0bWMzZHBoNTlnaG1hYmUifQ.9IpTpyptAxhC6ZoUqKCd9w";
 const map = new mapboxgl.Map({
   container: "map",
@@ -167,6 +155,7 @@ map.on("load", () => {
               }),
               "top-left"
             );
+            // add the +/- buttons
             map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-left");
 
             map.addLayer({
@@ -470,9 +459,6 @@ map.on("load", () => {
       visibility: "none",
     },
   });
-
-  // marker.setLngLat(lngLat).addTo(map); // Add marker at CCPA
-  // getIso(); // API call
 });
 
 // inspect a feature on click
@@ -587,7 +573,6 @@ map.on("click", categoryList, (e) => {
     let stationnam = e.features[0].properties.stationnam;
     let code = e.features[0].properties.code;
     let address1 = e.features[0].properties.address1;
-    let address2 = e.features[0].properties.address2;
     let city = e.features[0].properties.city;
     let STATE = e.features[0].properties.STATE;
     let stntype = e.features[0].properties.stntype;
@@ -622,3 +607,16 @@ map.on("mouseenter", categoryList, () => {
 map.on("mouseleave", categoryList, () => {
   map.getCanvas().style.cursor = "";
 });
+// show hide navigation
+function toggleNav() {
+  var sidebar = document.querySelector(".sidebar");
+  var content = document.getElementById("content");
+
+  if (sidebar.style.width === "0px" || sidebar.style.width === "") {
+    sidebar.style.width = "250px";
+    content.style.marginRight = "250px";
+  } else {
+    sidebar.style.width = "0";
+    content.style.marginRight = "0";
+  }
+}
