@@ -57,6 +57,7 @@ for (var key in categories) {
 
 // First wait for the map to load!
 map.on("load", () => {
+  // add icons
   map.loadImage("icons/logo_sys_csu_24px_sq.png", (error, image) => {
     if (error) throw error;
     map.addImage("csu", image);
@@ -89,6 +90,7 @@ map.on("load", () => {
     if (error) throw error;
     map.addImage("programs", image);
   });
+  // parse the CSVs and add the data
   for (let i = 0; i < datasets.length; i++) {
     $.ajax({
       type: "GET",
@@ -144,20 +146,26 @@ map.on("load", () => {
               return matchingFeatures;
             }
             // add the search box
-            map.addControl(
-              new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                localGeocoder: forwardGeocoder,
-                mapboxgl: mapboxgl,
-                collapsed: false,
-                proximity: { latitude: 37.78352, longitude: -122.219355 },
-                clearAndBlurOnEsc: true,
-              }),
-              "top-left"
-            );
+            const geocoder = new MapboxGeocoder({
+              accessToken: mapboxgl.accessToken,
+              localGeocoder: forwardGeocoder,
+              mapboxgl: mapboxgl,
+              collapsed: false,
+              proximity: { latitude: 37.78352, longitude: -122.219355 },
+              clearAndBlurOnEsc: true,
+            });
+
+            map.addControl(geocoder, "top-left");
+            // Listen for when the user selects a result
+            geocoder.on("result", (e) => {
+              console.log(e.result);
+              addPopup("userSearch", e);
+            });
+
             // add the +/- buttons
             map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-left");
 
+            // add map layers
             map.addLayer({
               id: "california",
               type: "circle",
@@ -190,30 +198,7 @@ map.on("load", () => {
               },
               filter: ["all", ["==", "system_acronym", "CCC, Peralta"]],
             });
-            map.addLayer({
-              id: "uc",
-              type: "symbol",
-              source: "schools",
-              layout: {
-                "icon-image": "uc",
-                "icon-size": 1,
-              },
-              paint: {
-                "icon-halo-color": "#fff",
-                "icon-halo-width": 2,
-              },
-              filter: ["all", ["==", "system_acronym", "UC"]],
-            });
-            map.addLayer({
-              id: "csu",
-              type: "symbol",
-              source: "schools",
-              layout: {
-                "icon-image": "csu",
-                "icon-size": 1,
-              },
-              filter: ["all", ["==", "system_acronym", "CSU"]],
-            });
+
             map.addLayer({
               id: "hbcu",
               type: "symbol",
@@ -459,6 +444,30 @@ map.on("load", () => {
       visibility: "none",
     },
   });
+  map.addLayer({
+    id: "uc",
+    type: "symbol",
+    source: "schools",
+    layout: {
+      "icon-image": "uc",
+      "icon-size": 10,
+    },
+    paint: {
+      "icon-halo-color": "#fff",
+      "icon-halo-width": 2,
+    },
+    filter: ["all", ["==", "system_acronym", "UC"]],
+  });
+  map.addLayer({
+    id: "csu",
+    type: "symbol",
+    source: "schools",
+    layout: {
+      "icon-image": "csu",
+      "icon-size": 1,
+    },
+    filter: ["all", ["==", "system_acronym", "CSU"]],
+  });
 });
 
 // inspect a feature on click
@@ -467,6 +476,47 @@ map.on("click", ["csu"], (e) => {
     layers: ["csu"],
   });
 });
+
+// popup function
+// slightly different behavior for search vs click
+function addPopup(source, e) {
+  const coords = e.result.geometry.coordinates;
+  let website = e.result.properties.website;
+  let image = e.result.properties.image;
+  let html = "";
+  let resultName = e.result.place_name;
+  if (resultName.startsWith("🦁")) {
+    console.log("The string begins with a lion!");
+    let school = e.result.properties.school_decision;
+    let degree = e.result.properties.degree;
+    let profile_url = e.result.properties.profile_url;
+    let ccpa_role = e.result.properties.ccpa_role;
+    html = `<a href='${image}' target='_blank'><img src='${image}' class='popup-img' /></a>
+    <p><strong>
+    <a href='${profile_url}' target='_blank'>${resultName}</a></strong><br>
+    <em> CCPA ${ccpa_role}</em></p>
+    <p><strong>School:</strong><br>
+    <a href="${website}" target='_blank'>${school}</a></p>
+    <p><strong>Degree or Credential:</strong><br>
+    ${degree}</p>`;
+  } else if (resultName.startsWith("📚") || resultName.startsWith("💰")) {
+    console.log("The string begins with a book!");
+    let website = e.result.properties.website;
+    let name = e.result.properties.name;
+    let desc = e.result.properties.description;
+    let image = e.result.properties.image;
+    html = `<a href='${website}' target='_blank'><img src='${image}' class='popup-img' /></a>
+        <p><strong><a href="${website}" target='_blank'>${name}</a></strong></p>`;
+  }
+  new mapboxgl.Popup().setLngLat(coords).setHTML(html).addTo(map);
+  // first properly prepare the object
+  if (source == "userSearch") {
+    console.log("User searched for:");
+  } else if (source == "userClick") {
+    console.log("User clicked on:");
+  }
+  // then format the popup content
+}
 
 // When a click event occurs on a feature in
 // the ... layer, open a popup at
@@ -480,7 +530,6 @@ map.on("click", categoryList, (e) => {
     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
   }
   // popup content
-  let object = JSON.stringify(e.features[0].properties);
   let name = e.features[0].properties.name;
   let website = e.features[0].properties.website;
   let image = e.features[0].properties.image;
