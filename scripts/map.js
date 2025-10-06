@@ -444,27 +444,41 @@ map.on("load", () => {
       visibility: "none",
     },
   });
-  map.addLayer({
-    id: "uc",
-    type: "symbol",
-    source: "schools",
-    layout: {
-      "icon-image": "uc",
-      "icon-size": 10,
-    },
-    paint: {
-      "icon-halo-color": "#fff",
-      "icon-halo-width": 2,
-    },
-    filter: ["all", ["==", "system_acronym", "UC"]],
-  });
+  // Add the UC symbol layer only after its image has been added to the style.
+  // Previously the layer used an enormous icon-size (10) and could be added
+  // before the image was available which results in a missing symbol.
+  function addUcLayer() {
+    if (map.getLayer("uc")) return;
+    map.addLayer({
+      id: "uc",
+      type: "symbol",
+      source: "schools",
+      layout: {
+        // small reasonable default; the images used are ~24px so 0.16 matches other symbols
+        "icon-image": "uc",
+        "icon-size": 0.16,
+      },
+      paint: {
+        "icon-halo-color": "#fff",
+        "icon-halo-width": 2,
+      },
+      filter: ["all", ["==", "system_acronym", "UC"]],
+    });
+  }
+  if (map.hasImage && map.hasImage("uc")) {
+    addUcLayer();
+  } else {
+    // wait for the map to be idle/rendered once the image may be available
+    map.once("idle", addUcLayer);
+  }
   map.addLayer({
     id: "csu",
     type: "symbol",
     source: "schools",
     layout: {
       "icon-image": "csu",
-      "icon-size": 1,
+      // use a small size consistent with other symbol layers
+      "icon-size": 0.16,
     },
     filter: ["all", ["==", "system_acronym", "CSU"]],
   });
