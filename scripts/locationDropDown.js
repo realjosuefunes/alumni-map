@@ -17,6 +17,7 @@ options.addEventListener("change", (event) => {
       });
     } else if (checked) {
       map.setLayoutProperty(clickedCat, "visibility", "visible");
+      map.moveLayer(clickedCat); // move selected layer to top
       checked = true;
       console.log(clickedCat + " is " + checked);
     } else {
@@ -28,6 +29,7 @@ options.addEventListener("change", (event) => {
     // if not a category, do other stuff
     if (event.target[event.target.selectedIndex].getAttribute("name") === "location") {
       newLocation = event.target[event.target.selectedIndex].value;
+      map.moveLayer(newLocation); // move selected layer to top
       console.log("if - changed the newLocation to " + newLocation);
       if (newLocation === "california") {
         map.setLayoutProperty("global", "visibility", "none");
