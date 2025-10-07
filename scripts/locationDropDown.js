@@ -2,8 +2,9 @@
 options.addEventListener("change", (event) => {
   clickedCat = event.target.name;
   checked = event.target.checked; // true or false
-  // show/hide layer with a matching name:
+  // show/hide layer with a matching name
   if (clickedCat in categories) {
+    // if they click 'seniors' zoom into CCPA
     if (checked && clickedCat === "ccpa_2026") {
       map.setLayoutProperty(clickedCat, "visibility", "visible");
       checked = true;
