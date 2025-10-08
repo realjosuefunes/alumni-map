@@ -201,6 +201,7 @@ map.on("load", () => {
             map.addLayer({
               id: "csu",
               type: "symbol",
+              slot: "top", // try to add UCs on top
               source: "schools",
               layout: {
                 "icon-image": "csu",
@@ -644,7 +645,7 @@ map.on("click", categoryList, (e) => {
     let name = e.features[0].properties.Name;
     let desc = e.features[0].properties.Description;
     let website = "https://bart.gov/stations";
-    html = `<img src='img/bart.jpg' class='popup-img' /><p><strong><a href="${website}" target='_blank'>${name} BART Station</a></strong><br>${desc}</p>`;
+    html = `<img src='img/transit/bart.jpg' class='popup-img' /><p><strong><a href="${website}" target='_blank'>${name} BART Station</a></strong><br>${desc}</p>`;
   } else {
     html = `<a href='${image}' target='_blank'><img src='${image}' class='popup-img' /></a><br/>
         <p><strong><a href="${website}" target='_blank'>${name}</a></strong>`;

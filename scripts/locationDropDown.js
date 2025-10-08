@@ -64,7 +64,7 @@ options.addEventListener("change", (event) => {
         map.setLayoutProperty("canada", "visibility", "none");
         map.setLayoutProperty("mexico", "visibility", "none");
         map.setLayoutProperty(newLocation, "visibility", "visible");
-        // fit map to united states
+        // fit map to peralta community colleges
         const bbox = [
           [-122.329989, 37.89548],
           [-122.17103, 37.748219],
@@ -72,6 +72,11 @@ options.addEventListener("change", (event) => {
         map.fitBounds(bbox, {
           padding: { top: 10, bottom: 25, left: 50, right: 5 },
         });
+        // add popups for peralta colleges
+        new mapboxgl.Popup().setLngLat([-122.269809, 37.869876]).setMaxWidth("20em").setHTML("<a href='https://peralta.edu' target='_blank'><strong>Berkeley City College</strong></a>").addTo(map);
+        new mapboxgl.Popup().setLngLat([-122.165494, 37.78945124]).setMaxWidth("20em").setHTML("<a href='https://peralta.edu' target='_blank'><strong>Merritt College</strong></a>").addTo(map);
+        new mapboxgl.Popup().setLngLat([-122.2628614, 37.79627513]).setMaxWidth("20em").setHTML("<a href='https://peralta.edu' target='_blank'><strong>Laney College</strong></a>").addTo(map);
+        new mapboxgl.Popup().setLngLat([-122.2786675, 37.781859]).setMaxWidth("20em").setHTML("<a href='https://peralta.edu' target='_blank'><strong>College of Alameda</strong></a>").addTo(map);
       } else if (newLocation === "north_america") {
         map.setLayoutProperty("global", "visibility", "none");
         map.setLayoutProperty("canada", "visibility", "visible");
