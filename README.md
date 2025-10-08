@@ -6,8 +6,7 @@ What colleges and universities have CCPA graduates chosen to attend? Use this in
 
 - See it live: https://ccpa-ousd.github.io/alumni-map
 
-![gif showing map search and alumni profile popup for SF State University](img/alumni-map-demo.gif)
-![gif showing regional dropdown and system toggle options](img/alumni-map-demo-2.gif)
+![gif showing map search and alumni profile popup for SF State University](img/alumni-map-demo.gif) ![gif showing regional dropdown and system toggle options](img/alumni-map-demo-2.gif)
 
 ## About CCPA
 
@@ -35,7 +34,7 @@ For people and school map markers, you can edit the data in Google Sheets to mod
 
 1. Contact graduates to request their permission to publish their slides and decision day information. Send this release form and save signed, returned copies in a folder ignored by Git.
 1. Open the "Decision Day" slide deck and edit slides to remove any information you don't want to publish.
-2. Download the slide deck as a PDF file. 
+1. Download the slide deck as a PDF file.
 
 ## Data sources
 
@@ -45,7 +44,7 @@ Alumni data comes from student slides submitted for Decision Day at CCPA.
 
 ### Staff
 
-CCPA Staff data is scraped from the Internet or gathered by students in 1:1 meetings.
+CCPA Staff data is gathered by students in 1:1 meetings or submitted by staff themselves – or scraped from the Internet and posted with permission.
 
 ### Transit layers
 
