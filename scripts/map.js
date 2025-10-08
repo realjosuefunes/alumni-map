@@ -169,6 +169,7 @@ map.on("load", () => {
             map.addLayer({
               id: "california",
               type: "circle",
+              slot: "bottom",
               source: "schools",
               paint: {
                 "circle-color": categories["california"].color,
@@ -461,17 +462,17 @@ map.on("load", () => {
     },
     "poi-label"
   );
-  map.addLayer({
-    id: "oakland-council-districts",
-    type: "line",
-    source: "oakland-council-districts",
-    paint: {
-      "line-width": 1,
-      "line-color": "red",
-      "line-opacity": 0.5,
-      visibility: "none",
-    },
-  });
+  // map.addLayer({
+  //   id: "oakland-council-districts",
+  //   type: "line",
+  //   source: "oakland-council-districts",
+  //   paint: {
+  //     "line-width": 1,
+  //     "line-color": "red",
+  //     "line-opacity": 0.5,
+  //     visibility: "none",
+  //   },
+  // });
 });
 
 // inspect a feature on click
@@ -541,7 +542,7 @@ map.on("click", categoryList, (e) => {
   let layer = e.features[0].layer.id;
   let html = "";
   // schools popups
-  if (layer == "uc" || layer == "csu" || layer == "ccc") {
+  if (layer == "uc" || layer == "csu" || layer == "ccc" || layer == "peralta") {
     let location = e.features[0].properties.location;
     let system_acronym = e.features[0].properties.system_acronym;
     let system_long = e.features[0].properties.system_long;
