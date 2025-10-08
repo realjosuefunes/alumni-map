@@ -199,35 +199,6 @@ map.on("load", () => {
               filter: ["all", ["==", "system_acronym", "CCC, Peralta"]],
             });
             map.addLayer({
-              id: "csu",
-              type: "symbol",
-              slot: "top", // try to add UCs on top
-              source: "schools",
-              layout: {
-                "icon-image": "csu",
-                // use a small size consistent with other symbol layers
-                "icon-size": 1,
-              },
-              filter: ["all", ["==", "system_acronym", "CSU"]],
-            });
-            map.addLayer({
-              id: "uc",
-              type: "symbol",
-              slot: "top", // try to add UCs on top
-              source: "schools",
-              layout: {
-                // small reasonable default; the images used are ~24px so 0.16 matches other symbols
-                "icon-image": "uc",
-                "icon-size": 1,
-              },
-              paint: {
-                "icon-halo-color": "#fff",
-                "icon-halo-width": 2,
-              },
-              filter: ["all", ["==", "system_acronym", "UC"]],
-            });
-
-            map.addLayer({
               id: "hbcu",
               type: "symbol",
               source: "schools",
@@ -422,11 +393,40 @@ map.on("load", () => {
             map.addLayer({
               id: "programs",
               type: "symbol",
+              slot: "bottom",
               source: "programs",
               layout: {
                 "icon-image": "programs",
                 "icon-size": 0.07,
               },
+            });
+            map.addLayer({
+              id: "csu",
+              type: "symbol",
+              slot: "top", // try to add CSUs on top
+              source: "schools",
+              layout: {
+                "icon-image": "csu",
+                // use a small size consistent with other symbol layers
+                "icon-size": 1,
+              },
+              filter: ["all", ["==", "system_acronym", "CSU"]],
+            });
+            map.addLayer({
+              id: "uc",
+              type: "symbol",
+              slot: "top", // try to add UCs on top
+              source: "schools",
+              layout: {
+                // small reasonable default; the images used are ~24px so 0.16 matches other symbols
+                "icon-image": "uc",
+                "icon-size": 1,
+              },
+              paint: {
+                "icon-halo-color": "#fff",
+                "icon-halo-width": 2,
+              },
+              filter: ["all", ["==", "system_acronym", "UC"]],
             });
           }
         );
