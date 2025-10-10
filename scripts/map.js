@@ -547,7 +547,7 @@ map.on("click", categoryList, (e) => {
     let system_acronym = e.features[0].properties.system_acronym;
     let system_long = e.features[0].properties.system_long;
     html = `<a href='${image}' target='_blank'><img src='${image}' class='popup-img' /></a>
-        <p><strong><a href="${website}" target='_blank'>${name}</a></strong> is a ${pubPriv.toLowerCase()} school located in ${location}. This campus part of the ${system_long} (${system_acronym}) system.`;
+        <p><strong><a href="${website}" target='_blank'>${name}</a></strong> is a ${pubPriv.toLowerCase()} school located in ${location}. This campus is part of the ${system_long} (${system_acronym}) system.`;
     // people popups
   } else if (layer == "ccpa_2022" || layer == "ccpa_2023") {
     let school = e.features[0].properties.school_decision;
