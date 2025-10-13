@@ -389,7 +389,7 @@ map.on("load", () => {
               layout: {
                 "icon-image": "ccpa",
                 "icon-size": 0.1,
-                // 'visibility': 'none'
+                visibility: "none",
               },
               filter: ["all", ["==", "grad_year", "staff"], ["!=", "ccpa_end", "Present"]],
             });
