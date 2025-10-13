@@ -154,7 +154,7 @@ map.on("load", () => {
               collapsed: false,
               proximity: { latitude: 37.78352, longitude: -122.219355 },
               clearAndBlurOnEsc: true,
-              limit: 15, // 👈 only show up to 5 results
+              limit: 12, // limit to x results
             });
 
             map.addControl(geocoder, "top-left");
