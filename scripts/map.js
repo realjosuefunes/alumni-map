@@ -38,7 +38,8 @@ categories = {
   ccpa_2022: { color: "#006000", outline: "gold", source: "people" }, // green
   ccpa_2023: { color: "#006000", outline: "gold", source: "people" }, // green
   ccpa_2026: { color: "#006000", outline: "gold", source: "people" }, // green
-  ccpa_staff: { color: "gold", outline: "#006000", source: "people" }, // green
+  ccpa_staff_current: { color: "gold", outline: "#006000", source: "people" }, // green
+  ccpa_staff_past: { color: "gold", outline: "#006000", source: "people" }, // green
   // Programs
   programs: { color: "gold", outline: "#006000", source: "programs" }, // green
   // Transit
@@ -153,6 +154,7 @@ map.on("load", () => {
               collapsed: false,
               proximity: { latitude: 37.78352, longitude: -122.219355 },
               clearAndBlurOnEsc: true,
+              limit: 15, // 👈 only show up to 5 results
             });
 
             map.addControl(geocoder, "top-left");
@@ -381,7 +383,7 @@ map.on("load", () => {
               filter: ["all", ["==", "grad_year", "2026"]],
             });
             map.addLayer({
-              id: "ccpa_staff",
+              id: "ccpa_staff_past",
               type: "symbol",
               source: "people",
               layout: {
@@ -389,7 +391,18 @@ map.on("load", () => {
                 "icon-size": 0.1,
                 // 'visibility': 'none'
               },
-              filter: ["all", ["==", "grad_year", "staff"]],
+              filter: ["all", ["==", "grad_year", "staff"], ["!=", "ccpa_end", "Present"]],
+            });
+            map.addLayer({
+              id: "ccpa_staff_current",
+              type: "symbol",
+              source: "people",
+              layout: {
+                "icon-image": "ccpa",
+                "icon-size": 0.1,
+                // 'visibility': 'none'
+              },
+              filter: ["all", ["==", "grad_year", "staff"], ["==", "ccpa_end", "Present"]],
             });
             map.addLayer({
               id: "programs",
@@ -565,7 +578,7 @@ map.on("click", categoryList, (e) => {
         ${name} (<i>Class of ${year}</i>)</p>
         <p><strong>Current school:</strong><br>
         <a href="${website}" target='_blank'>${school}</a></p>`;
-  } else if (layer == "ccpa_staff") {
+  } else if (layer == "ccpa_staff_current" || layer == "ccpa_staff_past") {
     let school = e.features[0].properties.school_decision;
     let degree = e.features[0].properties.degree;
     let profile_url = e.features[0].properties.profile_url;
