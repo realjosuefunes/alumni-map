@@ -449,12 +449,13 @@ map.on("load", () => {
   }
 });
 
+// isochrones and city council districts
 map.on("load", () => {
-  map.addSource("oakland-council-districts", {
-    type: "geojson",
-    // Use a URL for the value for the `data` property.
-    data: "sources/City_of_Oakland_Council_Districts.geojson",
-  });
+  // map.addSource("oakland-council-districts", {
+  //   type: "geojson",
+  //   // Use a URL for the value for the `data` property.
+  //   data: "sources/City_of_Oakland_Council_Districts.geojson",
+  // });
   map.addSource("iso", {
     type: "geojson",
     data: {
@@ -462,7 +463,6 @@ map.on("load", () => {
       features: [],
     },
   });
-
   map.addLayer(
     {
       id: "isoLayer",
